@@ -4,21 +4,29 @@ const passport = require('passport');
 
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
+router.get('/google/test', (req, res) => {
+  res.send('test');
+});
+
 // Callback route
 router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
-  (err, req, res, next) => {
-    if (err) {
-      if (err.name === 'TokenError') {
-        res.redirect('/auth/google');
-      }
-      else {
-        throw err;
-      }
-    }
-    else {
-      res.redirect('/dashboard');
-    }
+  (req, res) => {
+    res.redirect('/dashboard');
   });
+
+router.get('/verify', (req, res) => {
+  if(req.user){
+    console.log(req.user);
+  }
+  else{
+    console.log('Not Auth');
+  }
+});
+
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/');
+});
 
 module.exports = router;
