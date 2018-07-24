@@ -21,14 +21,14 @@ module.exports = function (passport) {
       
       const newUser = {
         googleID: profile.id,
-        firstName: profile.givenName,
-        lastName: profile.familyName,
+        firstName: profile.name.givenName,
+        lastName: profile.name.familyName,
         email: profile.emails[0].value,
         image: image
       };
 
       // Check for existing user
-      User.findOne({googleID: profile.ID})
+      User.findOne({googleID: profile.id})
       .then(user => {
         if(user){
           // Return user, first parameter being an error
